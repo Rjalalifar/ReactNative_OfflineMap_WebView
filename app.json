@@ -1,0 +1,10 @@
+{
+  "name": "MobileApp",
+  "displayName": "MobileApp",
+  "icon": "./assets/icon.png",
+        "splash": {
+            "image": "./assets/splash.png",
+            "resizeMode": "cover",
+            "backgroundColor": "#ffffff"
+        }
+}

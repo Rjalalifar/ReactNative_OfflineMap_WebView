@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<base target="_top">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<title>Mobile tutorial - Leaflet</title>
+	
+	<!-- <link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" /> -->
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"  ></script>
+
+	<!-- <script src="Leaflet.Editable.js"></script> -->
+	
+	
+	<script src="geojson.js"  ></script>
+	<script src="firehydrants.js"  ></script>
+	<script src="conex.js"  ></script>
+	<script src="h.js"  ></script>
+	<script src="Acc.js"  ></script>
+
+
+
+
+	<style>
+		html, body {
+			height: 100%;
+			margin: 0;
+		}
+		.leaflet-container {
+			height: 400px;
+			width: 600px;
+			max-width: 100%;
+			max-height: 100%;
+		}
+	</style>
+
+	<style>body { padding: 0; margin: 0; } #map { height: 100%; width: 100vw; }</style>
+</head>
+
+<div id='map'></div>
+
+
+<script>
+
+	// alert(x.firehydrants)
+	// import configData from './geojson.json';
+
+	// const map = L.map('map').fitWorld();
+
+	const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png')
+
+	function onLocationFound(e) {
+		const radius = e.accuracy / 2;
+
+		const locationMarker = L.marker(e.latlng).addTo(map)
+			.bindPopup(`You are within ${radius} meters from this point`).openPopup();
+
+		const locationCircle = L.circle(e.latlng, radius).addTo(map);
+	}
+
+	function onLocationError(e) {
+		alert(e.message);
+	}
+
+
+
+
+
+	cities=L.geoJSON(myLines)
+	firehydrants=L.geoJSON(firehydrants)
+	conex=L.geoJSON(conex)
+	h=L.geoJSON(h)
+
+
+
+	var myStyle = {
+    "color": "#ff7800",
+    "weight": 5,
+    "opacity": 0.65
+  };
+	Acc=L.geoJSON(Acc,{
+    style: myStyle
+})
+
+	var map = L.map('map', {center: [35.73, 51.3],zoom: 13,layers: [tiles, cities,firehydrants,h,conex,Acc]});
+
+	map.on('locationfound', onLocationFound);
+	map.on('locationerror', onLocationError);
+
+	map.locate({setView: true, maxZoom: 16});
+
+	var baseMaps = {
+    "نقشه پایه": tiles
+};
+
+var overlayMaps = {
+    "Street": cities,
+	"Hidrant": firehydrants,
+	"Conex": conex,
+	"Hospital": h,
+	"Crisis": Acc
+};
+
+
+
+// L.EditControl = L.Control.extend({
+
+// options: {
+// 	position: 'topleft',
+// 	callback: null,
+// 	kind: '',
+// 	html: ''
+// },
+
+// onAdd: function (map) {
+// 	var container = L.DomUtil.create('div', 'leaflet-control leaflet-bar'),
+// 		link = L.DomUtil.create('a', '', container);
+
+// 	link.href = '#';
+// 	link.title = 'Create a new ' + this.options.kind;
+// 	link.innerHTML = this.options.html;
+// 	L.DomEvent.on(link, 'click', L.DomEvent.stop)
+// 			  .on(link, 'click', function () {
+// 				window.LAYER = this.options.callback.call(map.editTools);
+
+// 				console.log(map.editTools.featuresLayer._layers)
+// 			  }, this);
+
+// 	return container;
+// }
+
+// });
+
+
+// L.NewMarkerControl = L.EditControl.extend({
+
+// options: {
+// 	position: 'topleft',
+// 	callback: map.editTools.startMarker,
+// 	kind: 'marker',
+// 	html: '🖈'
+// }
+
+
+// });
+
+
+
+map.on('contextmenu', (e) => {
+//   alert('Lat, Lon:'+ e.latlng.lat + ',' + e.latlng.lng);
+  var newMarker = new L.marker(e.latlng).addTo(map);
+
+  var jsonData = JSON.stringify(e.latlng);
+
+  download(JSON.stringify(jsonData), "yourfile.json", "text/plain");
+});
+
+function download(content, fileName, contentType) {
+		  const a = document.createElement("a");
+		  const file = new Blob([content], { type: contentType });
+
+		  a.href = URL.createObjectURL(file);
+
+		  a.download = fileName;
+
+		  a.click();
+		}
+
+// map.addControl(new L.NewMarkerControl());
+
+L.control.layers(baseMaps, overlayMaps,{ position: 'bottomleft' }).addTo(map);
+
+
+
+</script>
+
+
+
+</body>
+</html>
