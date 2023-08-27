@@ -93,59 +93,18 @@
 	map.locate({setView: true, maxZoom: 16});
 
 	var baseMaps = {
-    "نقشه پایه": tiles
+    "BaseMap": tiles
 };
 
 var overlayMaps = {
-    "Street": cities,
-	"Hidrant": firehydrants,
+    "Str": cities,
+	"Hi": firehydrants,
 	"Conex": conex,
-	"Hospital": h,
-	"Crisis": Acc
+	"Ho": h,
+	"Accident": Acc
 };
 
 
-
-// L.EditControl = L.Control.extend({
-
-// options: {
-// 	position: 'topleft',
-// 	callback: null,
-// 	kind: '',
-// 	html: ''
-// },
-
-// onAdd: function (map) {
-// 	var container = L.DomUtil.create('div', 'leaflet-control leaflet-bar'),
-// 		link = L.DomUtil.create('a', '', container);
-
-// 	link.href = '#';
-// 	link.title = 'Create a new ' + this.options.kind;
-// 	link.innerHTML = this.options.html;
-// 	L.DomEvent.on(link, 'click', L.DomEvent.stop)
-// 			  .on(link, 'click', function () {
-// 				window.LAYER = this.options.callback.call(map.editTools);
-
-// 				console.log(map.editTools.featuresLayer._layers)
-// 			  }, this);
-
-// 	return container;
-// }
-
-// });
-
-
-// L.NewMarkerControl = L.EditControl.extend({
-
-// options: {
-// 	position: 'topleft',
-// 	callback: map.editTools.startMarker,
-// 	kind: 'marker',
-// 	html: '🖈'
-// }
-
-
-// });
 
 
 
